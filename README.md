@@ -10,7 +10,7 @@ The maze is read from an external file named `maze.txt`, where:
 
 1. Compile the code:
 
-g++ main.cpp -o maze-solver
+g++ -std=c++17 main.cpp -o maze-solver
 
 2. Run the program:
 
