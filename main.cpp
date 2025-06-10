@@ -1,15 +1,18 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <sstream> 
 
 using namespace std;
 
 void solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY);
-vector <vector<int> > readMazeFromFile(const string& filename);
+vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int& startY, int& endX, int& endY);
 
 int main() {
-    vector <vector<int> > maze = readMazeFromFile("maze.txt");
+    int startX, startY, endX, endY;
+    vector<vector<int>> maze = readMazeFromFile("maze.txt", startX, startY, endX, endY);
 
+    cout << "found" << startX << "," << startY << "," << endX << "," << endY << endl;
     for (const auto& row: maze) {
         for (int cell: row) {
             cout << cell << " ";
@@ -22,7 +25,7 @@ int main() {
     return 0;
 }
 
-vector <vector<int> > readMazeFromFile(const string& filename) {
+vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int& startY, int& endX, int& endY) {
     vector <vector<int> > maze;
     ifstream file(filename);
 
@@ -38,6 +41,20 @@ vector <vector<int> > readMazeFromFile(const string& filename) {
         getline(file, line);
 
         if (line.empty()) continue;
+
+        if (line.find("START") == 0) {
+            istringstream iss(line);
+            string dummy;
+            iss >> dummy >> startX >> startY;
+            continue;
+        }
+
+	if (line.find("END") == 0) {
+    	    istringstream iss(line);
+    	    string dummy;
+    	    iss >> dummy >> endX >> endY;
+    	    continue;
+	}
 
         for (char ch: line) {
             if (ch == '0' || ch == '1') {
