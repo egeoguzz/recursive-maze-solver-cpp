@@ -20,7 +20,7 @@ int main() {
         cout << endl;
     }
 
-    solveMaze(maze, 0,0, 3,3);
+    solveMaze(maze, startX, startY, endX, endY);
 
     return 0;
 }
