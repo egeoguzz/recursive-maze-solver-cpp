@@ -5,8 +5,9 @@
 
 using namespace std;
 
-void solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY);
+bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY);
 vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int& startY, int& endX, int& endY);
+void printMaze(const vector<vector<int>>& maze);
 
 int main() {
     int startX, startY, endX, endY;
@@ -21,6 +22,8 @@ int main() {
     }
 
     solveMaze(maze, startX, startY, endX, endY);
+
+    printMaze(maze);
 
     return 0;
 }
@@ -71,34 +74,57 @@ vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int&
     return maze;
 }
 
-void solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY) {
+bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY) {
     int endX = maze.size();
     int endY = maze[0].size();
+    bool destinationReached = false;
     if (locX == destinationX && locY == destinationY) {
 	maze[locX][locY] = 9;
+	return true;
 	cout << "done";
     }
 
     if (locX-1 >= 0 && maze[locX-1][locY] != 1 && maze[locX-1][locY] != 2) {
 	cout << "x: " << locX-1 << endl << "y: " << locY << endl;
 	maze[locX][locY] = 2;
-	solveMaze(maze, locX-1, locY, destinationX, destinationY);
+	destinationReached = solveMaze(maze, locX-1, locY, destinationX, destinationY);
+	if (destinationReached) {
+	    maze[locX][locY] = 3;
+	}
     } 
     if (locX + 1 < endX && maze[locX+1][locY] != 1 && maze[locX+1][locY] != 2) {
 	cout << "x: " << locX +1 << endl << "y: " << locY << endl;
 	maze[locX][locY] = 2;
-	solveMaze(maze, locX +1, locY, destinationX, destinationY);
+	destinationReached = solveMaze(maze, locX +1, locY, destinationX, destinationY);
+	if (destinationReached) {
+	    maze[locX][locY] = 3;
+	}
     }
     if (locY + 1 < endY && maze[locX][locY +1] != 1 && maze[locX][locY+1] != 2) {
 	cout << "x: " << locX << endl << "y: " << locY +1 << endl;
 	maze[locX][locY] = 2;
-	solveMaze(maze, locX, locY+1, destinationX, destinationY);
+	destinationReached = solveMaze(maze, locX, locY+1, destinationX, destinationY);
+	if (destinationReached) {
+	    maze[locX][locY] = 3;
+	}
     } 
     if (locY - 1 >= 0 && maze[locX][locY-1] != 1 && maze[locX][locY-1] != 2) {
 	cout << "x: " << locX << endl << "y: " << locY-1 << endl;
-	maze[locX][locY] = 2;
-	solveMaze(maze, locX, locY-1, destinationX, destinationY);
+	destinationReached = solveMaze(maze, locX, locY-1, destinationX, destinationY);
+	if (destinationReached) {
+	    maze[locX][locY] = 3;
+	}
     }
+    return destinationReached;
     
+}
+
+void printMaze(const vector<vector<int>>& maze) {
+    for (const auto& row : maze) {
+        for (int cell : row) {
+            cout << cell << " ";
+        }
+        cout << endl; 
+    }
 }
 
