@@ -8,6 +8,7 @@ using namespace std;
 bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY);
 vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int& startY, int& endX, int& endY);
 void printMaze(const vector<vector<int>>& maze);
+void printMazePretty(const vector<vector<int>>& maze);
 
 int main() {
     int startX, startY, endX, endY;
@@ -23,7 +24,7 @@ int main() {
 
     solveMaze(maze, startX, startY, endX, endY);
 
-    printMaze(maze);
+    printMazePretty(maze);
 
     return 0;
 }
@@ -125,6 +126,27 @@ void printMaze(const vector<vector<int>>& maze) {
             cout << cell << " ";
         }
         cout << endl; 
+    }
+}
+
+void printMazePretty(const vector<vector<int>>& maze) {
+    for (const auto& row : maze) {
+        for (int cell : row) {
+            switch(cell) {
+                case 3:
+                    cout << "X ";
+                    break;
+                case 2:
+                    cout << "V ";
+                    break;
+                case 9:
+                    cout << "E ";
+                    break;
+                default:
+                    cout << cell << " ";
+            }
+        }
+        cout << endl;
     }
 }
 
