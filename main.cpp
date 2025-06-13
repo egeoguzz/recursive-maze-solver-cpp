@@ -91,6 +91,7 @@ bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX,
 	destinationReached = solveMaze(maze, locX-1, locY, destinationX, destinationY);
 	if (destinationReached) {
 	    maze[locX][locY] = 3;
+            return true;
 	}
     } 
     if (locX + 1 < endX && maze[locX+1][locY] != 1 && maze[locX+1][locY] != 2) {
@@ -99,6 +100,7 @@ bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX,
 	destinationReached = solveMaze(maze, locX +1, locY, destinationX, destinationY);
 	if (destinationReached) {
 	    maze[locX][locY] = 3;
+	    return true;
 	}
     }
     if (locY + 1 < endY && maze[locX][locY +1] != 1 && maze[locX][locY+1] != 2) {
@@ -107,6 +109,7 @@ bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX,
 	destinationReached = solveMaze(maze, locX, locY+1, destinationX, destinationY);
 	if (destinationReached) {
 	    maze[locX][locY] = 3;
+            return true;
 	}
     } 
     if (locY - 1 >= 0 && maze[locX][locY-1] != 1 && maze[locX][locY-1] != 2) {
@@ -114,6 +117,7 @@ bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX,
 	destinationReached = solveMaze(maze, locX, locY-1, destinationX, destinationY);
 	if (destinationReached) {
 	    maze[locX][locY] = 3;
+            return true;
 	}
     }
     return destinationReached;
