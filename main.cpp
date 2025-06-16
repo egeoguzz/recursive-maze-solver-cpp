@@ -75,53 +75,22 @@ vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int&
     return maze;
 }
 
-bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY) {
-    int endX = maze.size();
-    int endY = maze[0].size();
-    bool destinationReached = false;
-    if (locX == destinationX && locY == destinationY) {
-	maze[locX][locY] = 9;
-	return true;
-	cout << "done";
+bool solveMaze(vector<vector<int>>& maze, int x, int y, int endX, int endY) {
+    if (x == endX && y == endY) {
+        maze[x][y] = 9;
+        return true;
     }
+    if (maze[x][y] != 0) return false;
 
-    if (locX-1 >= 0 && maze[locX-1][locY] != 1 && maze[locX-1][locY] != 2) {
-	cout << "x: " << locX-1 << endl << "y: " << locY << endl;
-	maze[locX][locY] = 2;
-	destinationReached = solveMaze(maze, locX-1, locY, destinationX, destinationY);
-	if (destinationReached) {
-	    maze[locX][locY] = 3;
-            return true;
-	}
-    } 
-    if (locX + 1 < endX && maze[locX+1][locY] != 1 && maze[locX+1][locY] != 2) {
-	cout << "x: " << locX +1 << endl << "y: " << locY << endl;
-	maze[locX][locY] = 2;
-	destinationReached = solveMaze(maze, locX +1, locY, destinationX, destinationY);
-	if (destinationReached) {
-	    maze[locX][locY] = 3;
-	    return true;
-	}
-    }
-    if (locY + 1 < endY && maze[locX][locY +1] != 1 && maze[locX][locY+1] != 2) {
-	cout << "x: " << locX << endl << "y: " << locY +1 << endl;
-	maze[locX][locY] = 2;
-	destinationReached = solveMaze(maze, locX, locY+1, destinationX, destinationY);
-	if (destinationReached) {
-	    maze[locX][locY] = 3;
-            return true;
-	}
-    } 
-    if (locY - 1 >= 0 && maze[locX][locY-1] != 1 && maze[locX][locY-1] != 2) {
-	cout << "x: " << locX << endl << "y: " << locY-1 << endl;
-	destinationReached = solveMaze(maze, locX, locY-1, destinationX, destinationY);
-	if (destinationReached) {
-	    maze[locX][locY] = 3;
-            return true;
-	}
-    }
-    return destinationReached;
-    
+    maze[x][y] = 2;
+
+    if (x > 0 && solveMaze(maze, x - 1, y, endX, endY)) { maze[x][y] = 3; return true; }
+    if (x + 1 < maze.size() && solveMaze(maze, x + 1, y, endX, endY)) { maze[x][y] = 3; return true; }
+    if (y > 0 && solveMaze(maze, x, y - 1, endX, endY)) { maze[x][y] = 3; return true; }
+    if (y + 1 < maze[0].size() && solveMaze(maze, x, y + 1, endX, endY)) { maze[x][y] = 3; return true; }
+
+    maze[x][y] = 0; 
+    return false;
 }
 
 void printMaze(const vector<vector<int>>& maze) {
