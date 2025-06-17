@@ -8,23 +8,25 @@ using namespace std;
 bool solveMaze(vector<vector<int> >& maze, int locX, int locY, int destinationX, int destinationY);
 vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int& startY, int& endX, int& endY);
 void printMaze(const vector<vector<int>>& maze);
-void printMazePretty(const vector<vector<int>>& maze);
+void printMazePretty(const vector<vector<int>>& maze, int startX = -1, int startY = -1);
+void printBanner(const string& content);
+void printEndCharacters();
+void printLegend();
 
 int main() {
     int startX, startY, endX, endY;
     vector<vector<int>> maze = readMazeFromFile("maze.txt", startX, startY, endX, endY);
-
-    cout << "found" << startX << "," << startY << "," << endX << "," << endY << endl;
-    for (const auto& row: maze) {
-        for (int cell: row) {
-            cout << cell << " ";
-        }
-        cout << endl;
-    }
+    
+    printBanner("Initial Maze");
+    printMaze(maze);
 
     solveMaze(maze, startX, startY, endX, endY);
 
-    printMazePretty(maze);
+    printEndCharacters();
+    printBanner("Solution Path");
+    printMazePretty(maze, startX, startY);
+    printLegend();
+    printEndCharacters();
 
     return 0;
 }
@@ -38,7 +40,6 @@ vector <vector<int> > readMazeFromFile(const string& filename, int& startX, int&
         exit(1);
     }
 
-    int num;
     while (!file.eof()) {
         vector <int> row;
         string line;
@@ -95,6 +96,7 @@ bool solveMaze(vector<vector<int>>& maze, int x, int y, int endX, int endY) {
 
 void printMaze(const vector<vector<int>>& maze) {
     for (const auto& row : maze) {
+	cout << "               ";
         for (int cell : row) {
             cout << cell << " ";
         }
@@ -102,24 +104,44 @@ void printMaze(const vector<vector<int>>& maze) {
     }
 }
 
-void printMazePretty(const vector<vector<int>>& maze) {
-    for (const auto& row : maze) {
-        for (int cell : row) {
-            switch(cell) {
-                case 3:
-                    cout << "X ";
-                    break;
-                case 2:
-                    cout << "V ";
-                    break;
-                case 9:
-                    cout << "E ";
-                    break;
-                default:
-                    cout << cell << " ";
+void printMazePretty(const vector<vector<int>>& maze, int startX, int startY) {
+    for (int i = 0; i < maze.size(); ++i) {
+        cout << "               ";
+        for (int j = 0; j < maze[i].size(); ++j) {
+            if (i == startX && j == startY)
+                cout << "S ";
+            else {
+                switch(maze[i][j]) {
+                    case 3: cout << "X "; break;
+                    case 9: cout << "E "; break;
+                    default: cout << maze[i][j] << " ";
+                }
             }
         }
         cout << endl;
     }
+}
+
+
+void printBanner(const string& content) {
+    const int width = 51;
+    int padding = width - 4 - content.size(); 
+    int left = padding / 2;
+    int right = padding - left;
+
+    cout << endl << string(width, '*') << endl;
+    cout << "*"
+         << string(left + 1, ' ') << content << string(right + 1, ' ') << "*"
+         << endl;
+    cout << string(width, '*') << endl << endl;
+}
+
+void printEndCharacters() {
+    cout << endl << "####################################################" << endl << endl;
+}
+
+void printLegend() {
+    cout << endl;
+    cout << "Legend: S = Start   E = End   X = Solution Path   1 = Wall   0 = Open" << endl;
 }
 
