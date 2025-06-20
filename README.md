@@ -18,13 +18,14 @@ and prints the solution path in a clean, visual format.
 
 The maze is provided as a plain text file.  
 **Example (`maze.txt`):**
-
+```
 START 0 0
 0 1 0 0
 0 1 0 1
 0 0 0 1
 1 1 0 0
 END 3 3
+```
 
 - **START x y:** Start position (row, column)
 - **END x y:** End/goal position (row, column)
